@@ -1,0 +1,37 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: 'Create {{collection}} "{{slug}}"'
+    update: 'Update {{collection}} "{{slug}}"'
+    delete: 'Delete {{collection}} "{{slug}}"'
+    uploadMedia: '[skip ci] Upload "{{path}}"'
+    deleteMedia: '[skip ci] Delete "{{path}}"'
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
+      - { label: "Author", name: "author", widget: "string", default: "Artec 3d" }
+      - { label: "Tags", name: "tags", widget: "list", default: [] }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - label: "Home Page"
+        name: "home"
+        file: "src/pages/index.astro"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Body", name: "body", widget: "markdown" }
