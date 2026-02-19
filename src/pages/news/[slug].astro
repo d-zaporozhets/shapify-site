@@ -1,0 +1,77 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getCollection, getEntryBySlug } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const title = post.data.title;
+const description = post.data.description;
+---
+
+<BlogLayout {title} {description}>
+
+<h4>
+  <a class='arrow' href='/news/'>
+    <span>←</span>
+    <span class='text'>All posts</span>
+  </a>
+</h4>
+
+<article class="post">
+  <span class="post-meta">
+    <time datetime={post.data.pubDate.toISOString()}>
+      {post.data.pubDate.toLocaleDateString('en-GB', { 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric' 
+      }).replace(',', '')}
+    </time>
+  </span>
+
+  <h2 class="post-title">{post.data.title}</h2>
+
+  <section class="post-content">
+    <Content />
+  </section>
+
+  <h4>
+    <a class='arrow' href='/news/'>
+      <span>←</span>
+      <span class='text'>All posts</span>
+    </a>
+  </h4>
+
+  <footer class="post-footer clearfix">
+    <section class="author">
+      <h4>{post.data.author}</h4>
+      <p></p>
+    </section>
+
+    <section class="share">
+      <h4>Share this post</h4>
+      <a class="icon-twitter" href={`http://twitter.com/share?text=${encodeURIComponent(post.data.title)}&url=${encodeURIComponent(`${Astro.url.origin}/news/${post.slug}/`)}`}
+        target="_blank" rel="noopener noreferrer">
+        <span class="hidden">Twitter</span>
+      </a>
+      <a class="icon-facebook" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${Astro.url.origin}/news/${post.slug}/`)}`}
+        target="_blank" rel="noopener noreferrer">
+        <span class="hidden">Facebook</span>
+      </a>
+      <a class="icon-google-plus" href={`https://plus.google.com/share?url=${encodeURIComponent(`${Astro.url.origin}/news/${post.slug}/`)}`}
+        target="_blank" rel="noopener noreferrer">
+        <span class="hidden">Google+</span>
+      </a>
+    </section>
+  </footer>
+</article>
+
+</BlogLayout>

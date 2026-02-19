@@ -1,0 +1,58 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => {
+  return data.pubDate <= new Date();
+});
+
+// Sort posts by date, newest first
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+// Pagination - show 6 posts per page
+const postsPerPage = 6;
+const currentPage = 1;
+const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+const startIndex = (currentPage - 1) * postsPerPage;
+const endIndex = startIndex + postsPerPage;
+const posts = sortedPosts.slice(startIndex, endIndex);
+
+const title = "Shapify News";
+const description = "Thoughts, stories and ideas.";
+---
+
+<BlogLayout {title} {description}>
+
+{posts.map(post => (
+  <article class="post">
+    <div class="post-header">
+      <span class="post-meta">
+        <time datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString('en-GB', { 
+            day: 'numeric', 
+            month: 'short', 
+            year: 'numeric' 
+          }).replace(',', '')}
+        </time>
+      </span>
+      <h2 class="post-title">
+        <a href={`/news/${post.slug}/`}>{post.data.title}</a>
+      </h2>
+    </div>
+    <section class="post-excerpt">
+      <p>
+        {post.data.description}
+        <a class='read-more' href={`/news/${post.slug}/`}>Read more</a>
+      </p>
+    </section>
+  </article>
+))}
+
+<nav class="pagination" role="navigation">
+  <span class="page-number">Page {currentPage} of {totalPages}</span>
+  {currentPage < totalPages && (
+    <a class="older-posts" href="/news/page/2/">Older Posts <span aria-hidden="true">→</span></a>
+  )}
+</nav>
+
+</BlogLayout>

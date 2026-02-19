@@ -1,0 +1,227 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const title = "Shapify | Get your Shapie | Nearest scanning point";
+const description = "Shapify is a simple, user friendly service to get your Shapie — your 3D printed selfie.";
+const pageClass = "page-map";
+---
+
+<Layout {title} {description} {pageClass}>
+<div class='page-map-block'>
+<div class='map-filter-block'>
+<div class='partner-type-list'>
+<div class='types'>
+<span class='active' data-index='0'>All points</span>
+<span data-index='1'>Eva</span>
+<span data-index='2'>Booth</span>
+</div>
+<div class='map-tooltip-wrapper tooltip-toggle'>
+?
+<div class='map-tooltip sh-tooltip'>
+Choose a
+<b>Eva</b>
+scanning point for a
+<ul>
+<li>mobile solution</li>
+<li>lower price</li>
+</ul>
+Choose a
+<b>Booth</b>
+scanning point for
+<ul>
+<li>better resolution</li>
+<li>bigger figurines sizes</li>
+</ul>
+All equipment is totally safe for your health
+</div>
+</div>
+</div>
+<ul class='active f32 partner-list' data-index='0'>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-00' data-toggle='collapse' href='#collapse-00' id='map-00'>
+<span class='flag lu pull-left'></span>
+<span class='partner-country pull-left'>Luxembourg</span>
+<span class='partner-count pull-right'>3</span>
+</div>
+<div class='partner-info collapse' id='collapse-00'>
+<div class='partner-block' id='partner-0148'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>SnT, University of Luxembourg</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0136'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Artec 3D Headquarters</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0154'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Luxembourg Science Center</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-01' data-toggle='collapse' href='#collapse-01' id='map-01'>
+<span class='flag pull-left us'></span>
+<span class='partner-country pull-left'>United States</span>
+<span class='partner-count pull-right'>8</span>
+</div>
+<div class='partner-info collapse' id='collapse-01'>
+<div class='partner-block' id='partner-0124'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Laser Imaging  c/o 3D Makery</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0169'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>3D Scan STL</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0168'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Richman M Siansimbi</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0167'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Digital Scan 3D LLC – Portland, OR</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0166'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Digital Scan 3D LLC – Seattle Office</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0128'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Digital Scan 3D LLC – Portland, OR</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0129'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Digital Scan 3D LLC – Seattle Office</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0130'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Digital Scan 3D LLC – Seattle Office</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-02' data-toggle='collapse' href='#collapse-02' id='map-02'>
+<span class='flag pull-left gb'></span>
+<span class='partner-country pull-left'>United Kingdom</span>
+<span class='partner-count pull-right'>5</span>
+</div>
+<div class='partner-info collapse' id='collapse-02'>
+<div class='partner-block' id='partner-0140'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Asda Superstore - Manchester</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0141'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Asda Superstore - Liverpool</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0142'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Asda Superstore - Leeds</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0143'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Asda Superstore - Birmingham</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+<div class='partner-block' id='partner-0144'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Asda Superstore - London</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-03' data-toggle='collapse' href='#collapse-03' id='map-03'>
+<span class='flag pull-left kw'></span>
+<span class='partner-country pull-left'>Kuwait</span>
+<span class='partner-count pull-right'>1</span>
+</div>
+<div class='partner-info collapse' id='collapse-03'>
+<div class='partner-block' id='partner-0120'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>3D UTOPIA</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-04' data-toggle='collapse' href='#collapse-04' id='map-04'>
+<span class='flag pull-left jp'></span>
+<span class='partner-country pull-left'>Japan</span>
+<span class='partner-count pull-right'>1</span>
+</div>
+<div class='partner-info collapse' id='collapse-04'>
+<div class='partner-block' id='partner-0106'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>Datadesign Co., Ltd.</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+<li class='clearfix'>
+<div class='partner-country-block collapsed clearfix' data-parent='#map-accordion-05' data-toggle='collapse' href='#collapse-05' id='map-05'>
+<span class='flag pull-left ng'></span>
+<span class='partner-country pull-left'>Nigeria</span>
+<span class='partner-count pull-right'>1</span>
+</div>
+<div class='partner-info collapse' id='collapse-05'>
+<div class='partner-block' id='partner-0133'>
+<div class='partner-top clearfix'>
+<span class='partner-name'>3D Makery Nigeria</span>
+<div class='partner-distance'></div>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class='map-block'>
+<div class='shadow'></div>
+<div class='map-wrapper' style="text-align: center; padding: 40px 0;">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <img src="/assets/sh-map-1117198aa1bb63eaf09e0b309f97501e976b23ef0bcc7126b3a73264f517bd60.png" alt="World map showing Shapify scanning points" style="width: 100%; height: auto; border-radius: 8px;" />
+    <div style="margin-top: 20px; font-size: 18px; color: #333;">
+      <p><strong>Find Shapify scanning points near you</strong></p>
+      <p style="margin-top: 10px; font-size: 16px;">
+        <a href="/scanning-point" style="color: #6e59a6; text-decoration: underline;">
+          Browse our scanning points
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</Layout>

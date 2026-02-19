@@ -1,0 +1,228 @@
+---
+// BlogLayout.astro - Based on original blog.shapify.me design
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "Shapify News", description = "Thoughts, stories and ideas." } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="shortcut icon" href="/blog-assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic" type="text/css">
+
+    <meta property="fb:admins" content="100005813343827"/>
+    <meta property="fb:app_id" content="1433904420159332"/>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    
+    <meta name="viewport" content="width=800" />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
+
+    <link rel="stylesheet" type="text/css" href="/blog-assets/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic|Open+Sans:700,400" />
+
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Shapify.me" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="/news/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:url" content="/news/" />
+    
+    <meta name="generator" content="Ghost 0.11" />
+
+    <style>
+      /* Footer styles from original blog */
+      .footer-wrapper {
+        background-color: #262626;
+        color: #fff;
+        margin-top: -86px;
+        padding: 0;
+        font-family: 'PT Sans';
+      }
+
+      .footer-wrapper footer {
+        padding: 25px 0 20px;
+        max-width: 950px;
+        margin: 0 auto;
+      }
+
+      .footer-wrapper footer > div {
+        text-align: center;
+      }
+
+      .footer-block:first-child {
+        text-align: left;
+        width: 140px;
+      }
+
+      .footer-block:first-child a {
+        border: none;
+      }
+
+      .footer-block:nth-child(2) {
+        padding-left: 30px;
+        text-align: left;
+        width: 270px;
+      }
+
+      .footer-block:nth-child(3) {
+        width: 300px;
+      }
+
+      .footer-block:last-child {
+        text-align: right;
+        width: 200px;
+      }
+
+      .footer-wrapper footer p {
+        margin: 0 0 6px;
+        font-size: 12px;
+      }
+
+      .footer-wrapper footer p a {
+        color: #f5881e;
+        border-bottom: 1px solid #f5881e;
+        text-decoration: none;
+        line-height: 1;
+        display: inline-block;
+      }
+
+      .footer-wrapper footer p a:hover {
+        color: #967ae3 !important;
+        border-bottom-color: #967ae3 !important;
+      }
+    </style>
+
+    <script is:inline>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-44425717-1', 'shapify.me');
+    ga('send', 'pageview');</script>
+</head>
+<body class="home-template">
+<div id="fb-root"></div>
+<script is:inline>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=1433904420159332";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+<div class='wrap'>
+    
+    <header class="clearfix">
+  <div class='base_logo pull-left'>
+    <a class='main' href='/'></a>
+    <a class='sub' href='/'>You. Me. Everyone. In 3D</a>
+  </div>
+  <div class='submenu large clearfix'>
+    <ul class="clearfix">
+      <li data-index="0">
+        <a href="/scanning-point">Get your Shapie</a>
+      </li>
+      <li data-index="1">
+        <a href="/partner/booth">Become a Partner</a>
+      </li>
+      <li data-index="2">
+        <a href="/custom-action-figure">Action Figures</a>
+      </li>
+      <li class='active'>
+        <a href="/news">News</a>
+      </li>
+      <li>
+        <a href="/faq">FAQ</a>
+      </li>
+    </ul>
+  </div>
+  <div class='submenu medium clearfix'>
+    <ul data-index="0" class="pull-left clearfix">
+      <li>
+        <a href="/scanning-point">Nearest scanning point</a>
+      </li>
+      <li>
+        <a href="/scan-at-home">At home</a>
+      </li>
+    </ul>
+    <ul data-index="1" class="pull-left clearfix">
+      <li>
+        <a href="/partner/booth">Artec Shapify Booth</a>
+      </li>
+    </ul>
+  </div>
+</header>
+<h1>Shapify News</h1>
+    <div id="site-img-wrapper"></div>
+
+    <main class="content" role="main">
+
+<slot />
+
+    </main>
+
+</div>
+
+
+  <div class='footer-wrapper'>
+    <footer class='clearfix'>
+      <div class='footer-block pull-left'>
+        <a href="https://artec-group.com/" target="_blank">
+          <img src="/blog-assets/images/artec3d.svg" alt="Artec Group" title="Artec Group" width="130"/>
+        </a>
+      </div>
+      <div class='footer-block pull-left'>
+        <p>
+          &copy; 2003-2015 Artec Group. All rights reserved.
+        </p>
+        <p>
+          <a class='termsOfUse' href="/termsofuse">Terms of use</a>
+          /
+          <a class='privacyPolicy' href="/privacypolicy">Privacy Policy</a>
+          /
+          <a class='eulaButton' href="/eula">EULA</a>
+        </p>
+      </div>
+      <div class='footer-block pull-left'>
+        <p>
+          Technical support inquiries:
+          <a href='mailto:support@shapify.me'>support@shapify.me</a>
+        </p>
+        <p>
+          Business inquiries:
+          <a href='mailto:business@shapify.me'>business@shapify.me</a>
+        </p>
+      </div>
+      <div class='footer-block social_share pull-left clearfix'>
+        <p>
+          <a href="https://www.facebook.com/shapify.me" class='facebook' target='_blank'>Facebook</a>
+          /
+          <a href="https://twitter.com/shapifyme" class='twitter' target='_blank'>Twitter</a>
+          /
+          <a href="https://www.instagram.com/shapify_me" class='instagram' target='_blank'>Instagram</a>
+        </p>
+      </div>
+    </footer>  
+  </div>
+
+</body>
+</html>
