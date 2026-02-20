@@ -322,7 +322,20 @@ Design by
 <img alt='' src='http://mc.yandex.ru/watch/31787181' style='position:absolute; left:-9999px;'>
 </div>
 </noscript>
-<!-- /Yandex.Metrika counter -->
+ <!-- /Yandex.Metrika counter -->
+
+<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script is:inline>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
 
 </body>
 </html>

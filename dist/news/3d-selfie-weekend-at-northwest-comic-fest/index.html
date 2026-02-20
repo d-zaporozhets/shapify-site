@@ -34,4 +34,14 @@ Business inquiries:
 /
 <a href="https://twitter.com/shapifyme" class="twitter" target="_blank" data-astro-cid-4dqtj3le>Twitter</a>
 /
-<a href="https://www.instagram.com/shapify_me" class="instagram" target="_blank" data-astro-cid-4dqtj3le>Instagram</a> </p> </div> </footer> </div> </body></html>
+<a href="https://www.instagram.com/shapify_me" class="instagram" target="_blank" data-astro-cid-4dqtj3le>Instagram</a> </p> </div> </footer> </div> <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> <script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script> </body> </html>
