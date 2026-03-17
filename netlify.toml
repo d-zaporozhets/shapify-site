@@ -1,18 +1,8 @@
 [build]
-  command = "npm run build"
   publish = "dist"
+  command = "echo 'Pre-built'"
 
-[build.environment]
-  NODE_VERSION = "20"
-
-# For static site generation
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# Note: Payload CMS runs separately on localhost:3002
-# For production, you would need to:
-# 1. Deploy Payload CMS separately (e.g., on Vercel, Railway, or another platform)
-# 2. Update PAYLOAD_URL in src/lib/payload.ts to point to your production Payload API
-# 3. Build Astro site with the production API URL
