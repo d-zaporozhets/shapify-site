@@ -1,0 +1,58 @@
+---
+const { title, description, buttonText, buttonLink, background } = Astro.props
+---
+
+<section class="cta-block" style={background ? `background: ${background}` : 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}>
+  <div class="container">
+    <div class="content">
+      {title && <h2 class="cta-title">{title}</h2>}
+      {description && <p class="cta-description">{description}</p>}
+      {buttonText && buttonLink && (
+        <a href={buttonLink} class="cta-button">{buttonText}</a>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+.cta-block {
+  padding: 6rem 0;
+  color: white;
+  text-align: center;
+}
+.cta-block .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.cta-block .cta-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+.cta-block .cta-description {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cta-block .cta-button {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  background: white;
+  color: #333;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  border: 2px solid white;
+}
+.cta-block .cta-button:hover {
+  background: transparent;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+</style>

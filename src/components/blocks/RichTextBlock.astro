@@ -1,0 +1,20 @@
+---
+const { richText } = Astro.props
+---
+
+<section class="rich-text-block">
+  <div class="container">
+    <div class="content" set:html={richText} />
+  </div>
+</section>
+
+<style>
+.rich-text-block {
+  padding: 4rem 0;
+}
+.rich-text-block .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+</style>

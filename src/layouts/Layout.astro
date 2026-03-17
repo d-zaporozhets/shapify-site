@@ -1,12 +1,21 @@
 ---
 // Layout.astro
+import { getHeader, getFooter } from '../lib/payload';
+
 export interface Props {
   title?: string;
   description?: string;
   pageClass?: string;
 }
 
-const { title = "Shapify", description = "3D printed figurines: 3D print yourself using a 3D portrait made in Shapify Booth in a matter of minutes. Shapify is a simple, user-friendly service to get your Shapie — your 3D selfie.", pageClass = "responsive-layout" } = Astro.props;
+const { title = "Shapify", description = "3D printed figurines: 3D print yourself using a 3D portrait made in Shapify Booth in a matter of minutes. Shapify is a simple, user-friendly service to get your Shapie — your 3D selfie.", pageClass = "" } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+const header = await getHeader();
+const footer = await getFooter();
+const navItems = header?.navItems || [];
+const socialLinks = footer?.socialLinks || [];
+const contactEmail = footer?.contactEmail || 'support@shapify.me';
 ---
 
 <!DOCTYPE html>
@@ -70,7 +79,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta content='width=device-width' name='viewport'>
 <meta content='3D scanning at home, 3D printing, Kinect application, Kinect software, 3D figurines, 3D selfies' name='keywords'>
 <meta content={description} name='description'>
-<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&display=swap' rel='stylesheet' type='text/css'>
 <title>{title} | Shapify</title>
 <script>
   var namespace = "new";
@@ -85,6 +94,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon-96822a71ad185851b357e4152f5bac612d2b337dcb894b7cddb1aaa9d853bfc0.ico" />
 <meta name="csrf-param" content="authenticity_token" />
 <meta name="csrf-token" content="m0NWwiikYjergr7NrF/7laWSTcZYjlBmHZeExZeh4C/iZwCc+EuJBSoIB+e1/5G77cpIhc6eRfZUkfGCR1z18g==" />
+<style is:global>
+/* Keep submenu visible when on active parent page */
+.navbar.submenu.medium.active-submenu {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+/* Highlight active submenu item */
+.navbar.submenu.medium li.active a {
+  color: #e8681e !important;
+  border-bottom: 2px solid #e8681e;
+}
+</style>
 </head>
 
 <body>
@@ -93,7 +115,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
-<div class={`${pageClass} shapify-container`}>
+<div class={`responsive-layout ${pageClass} shapify-container`}>
 <div class='navbar-fluid-top'>
 <div class='header-wrapper'>
 <header class='site-width clearfix'>
@@ -133,33 +155,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </li>
 </ul>
 <div class='navbar submenu large clearfix'>
-<ul class='nav navbar-nav base-menu'>
-<li data-index='0'>
-<a href="/scanning-point">Scanning points</a>
-</li>
-<li data-index='1'>
-<a href="/partner/eva">Become a Partner</a>
-</li>
-<li>
-<a href="/custom-action-figure">Action Figures</a>
-</li>
-<li class='external'><a href="/news">News</a></li>
-<li><a href="/faq">FAQ</a></li>
-</ul>
+  <ul class='nav navbar-nav base-menu'>
+    {navItems.map((item: any, index: number) => {
+      const isActive = currentPath === item.url || 
+        (item.subItems && item.subItems.some((s: any) => currentPath.startsWith(s.url)));
+      return (
+        <li data-index={item.subItems?.length > 0 ? index : undefined} class={isActive ? 'active' : ''}>
+          <a href={item.url}>{item.label}</a>
+        </li>
+      );
+    })}
+  </ul>
 </div>
-<div class='menu-border'></div>
-<div class='navbar submenu medium clearfix'>
-<ul class='nav navbar-nav base-menu' data-index='0'>
-<li class='left'><a href="/scanning-point">Find a Partner</a></li>
-<li><a href="/scan-at-home">Scan at Home</a></li>
-</ul>
-</div>
-<div class='navbar submenu medium clearfix'>
-<ul class='nav navbar-nav base-menu' data-index='1'>
-<li class='left'><a href="/partner/eva">Eva</a></li>
-<li><a href="/partner/booth">Booth</a></li>
-</ul>
-</div>
+{navItems.map((item: any, index: number) => {
+  const isActive = currentPath === item.url || 
+    (item.subItems && item.subItems.some((s: any) => currentPath.startsWith(s.url)));
+  return item.subItems && item.subItems.length > 0 && (
+    <div class={`navbar submenu medium clearfix${isActive ? ' active-submenu' : ''}`}>
+      <ul class={`nav navbar-nav base-menu${isActive ? ' active' : ''}`} data-index={index}>
+        {item.subItems.map((sub: any, i: number) => (
+          <li class={`${i === 0 ? 'left' : ''} ${currentPath.startsWith(sub.url) ? 'active' : ''}`}>
+            <a href={sub.url}>{sub.label}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+})}
 
 </div>
 <div class='mobile-menu pull-right clearfix'>
@@ -169,34 +191,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </a>
 <div aria-labelledby='dropdownMobileMenu' class='dropdown-menu' role='menu'>
 <ul class='mobile-menu-list'>
-<li class='mobile-menu-list-title'>Scanning points</li>
-<li>
-<a href="/scanning-point"><span class='mobile-menu-span'>Find a Partner</span>
-</a></li>
-<li>
-<a href="/scan-at-home"><span class='mobile-menu-span'>Scan at Home</span>
-</a></li>
-<hr class='devider'>
-<li class='mobile-menu-list-title'>Become a Partner</li>
-<li class='left'>
-<a href="/partner/eva"><span class='mobile-menu-span'>Eva</span>
-</a></li>
-<li>
-<a href="/partner/booth"><span class='mobile-menu-span'>Booth</span>
-</a></li>
-<hr class='devider'>
-<li class='external'>
-<a href="/news"><span class='mobile-menu-span'>News</span>
-</a></li>
-<hr class='devider'>
-<li>
-<a href="/faq"><span class='mobile-menu-span'>FAQ</span>
-</a></li>
-
-<div class='logout'>
-<div class='toggle-mobile-login-menu'></div>
-<div class='sign-menu'></div>
-</div>
+  {navItems.map((item: any, index: number) => (
+    <>
+      {index > 0 && <hr class='devider' />}
+      {item.subItems && item.subItems.length > 0 ? (
+        <>
+          <li class='mobile-menu-list-title'>{item.label}</li>
+          {item.subItems.map((sub: any, i: number) => (
+            <li class={i === 0 ? 'left' : ''}>
+              <a href={sub.url}><span class='mobile-menu-span'>{sub.label}</span></a>
+            </li>
+          ))}
+        </>
+      ) : (
+        <li class={item.label === 'News' ? 'external' : ''}>
+          <a href={item.url}><span class='mobile-menu-span'>{item.label}</span></a>
+        </li>
+      )}
+    </>
+  ))}
+  <div class='logout'>
+    <div class='toggle-mobile-login-menu'></div>
+    <div class='sign-menu'></div>
+  </div>
 </ul>
 </div>
 </div>
@@ -224,16 +241,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </a></div>
 <div class='footer-block'>
 <p>&copy; 2026 Artec Group. All rights reserved.</p>
-<p class='hidden-xs hidden-sm'><a class="termsOfUseButton" data-remote="true" href="/termsofuse">Terms of Use</a>
+<p class='hidden-xs hidden-sm'><a class="termsOfUseButton" href="/termsofuse">Terms of Use</a>
 /
-<a class="privacyPolicyButton" data-remote="true" href="/privacypolicy">Privacy Policy</a>
+<a class="privacyPolicyButton" href="/privacypolicy">Privacy Policy</a>
 /
-<a class="eulaButton" data-remote="true" href="/eula">EULA</a>
+<a class="eulaButton" href="/eula">EULA</a>
 </p>
 </div>
 <div class='footer-block hidden-xs hidden-sm'>
 <p>
-Technical support inquiries: <a href="mailto:support@shapify.me">support@shapify.me</a>
+Technical support inquiries: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
 </p>
 <p>
 Business inquiries: <a href="mailto:business@shapify.me">business@shapify.me</a>
@@ -241,11 +258,14 @@ Business inquiries: <a href="mailto:business@shapify.me">business@shapify.me</a>
 </div>
 <div class='footer-block'>
 <p class='clearfix social_share'>
-<a target="_blank" href="https://www.facebook.com/shapify.me">Facebook</a>
-/
-<a target="_blank" href="https://twitter.com/shapifyme">Twitter</a>
-/
-<a target="_blank" href="http://www.instagram.com/shapify_me">Instagram</a>
+  {socialLinks.map((link: any, i: number) => (
+    <>
+      {i > 0 && ' / '}
+      <a target="_blank" href={link.url}>
+        {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
+      </a>
+    </>
+  ))}
 </p>
 <p>
 Design by
@@ -324,17 +344,62 @@ Design by
 </noscript>
  <!-- /Yandex.Metrika counter -->
 
-<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<div id="legal-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; overflow-y:auto;">
+  <div style="background:white; max-width:900px; margin:40px auto; padding:40px; position:relative; border-radius:4px;">
+    <button id="legal-modal-close" style="position:absolute; top:15px; right:20px; font-size:24px; background:none; border:none; cursor:pointer; color:#333;">✕</button>
+    <div id="legal-modal-content"></div>
+  </div>
+</div>
+
 <script is:inline>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
+  document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('legal-modal');
+    var modalContent = document.getElementById('legal-modal-content');
+    var closeBtn = document.getElementById('legal-modal-close');
+
+    var legalLinks = document.querySelectorAll('a[href="/termsofuse"], a[href="/privacypolicy"], a[href="/eula"]');
+    
+    legalLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var url = this.getAttribute('href');
+        
+        fetch(url)
+          .then(function(res) { return res.text(); })
+          .then(function(html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            var content = doc.querySelector('.max-width');
+            if (content) {
+              modalContent.innerHTML = content.innerHTML;
+            } else {
+              modalContent.innerHTML = doc.body.innerHTML;
+            }
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+          });
+      });
+    });
+
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    });
+
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
       }
     });
-  }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+  });
 </script>
 
 </body>

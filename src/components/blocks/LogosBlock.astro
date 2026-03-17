@@ -1,0 +1,24 @@
+---
+const props = Astro.props
+---
+
+<section class="${block.toLowerCase().replace('block', '')}-block">
+  <div class="container">
+    <h3>${block.replace('Block', '')} Block</h3>
+    <p>This block type will be implemented based on the specific requirements.</p>
+    <pre>{JSON.stringify(props, null, 2)}</pre>
+  </div>
+</section>
+
+<style>
+.${block.toLowerCase().replace('block', '')}-block {
+  padding: 2rem 0;
+  border: 1px dashed #ccc;
+  margin: 1rem 0;
+}
+.${block.toLowerCase().replace('block', '')}-block .container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+</style>

@@ -1,0 +1,37 @@
+---
+const { leftColumn, rightColumn, layout } = Astro.props
+---
+
+<section class="two-column-block">
+  <div class={`container ${layout || 'equal'}`}>
+    <div class="column left-column" set:html={leftColumn} />
+    <div class="column right-column" set:html={rightColumn} />
+  </div>
+</section>
+
+<style>
+.two-column-block {
+  padding: 4rem 0;
+}
+.two-column-block .container {
+  display: grid;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.two-column-block .container.equal {
+  grid-template-columns: 1fr 1fr;
+}
+.two-column-block .container.left-wide {
+  grid-template-columns: 2fr 1fr;
+}
+.two-column-block .container.right-wide {
+  grid-template-columns: 1fr 2fr;
+}
+.two-column-block .column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>

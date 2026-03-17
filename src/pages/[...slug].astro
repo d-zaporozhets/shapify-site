@@ -1,0 +1,294 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getAllPages, getPageBySlug } from '../lib/payload';
+
+export async function getStaticPaths() {
+  const pages = await getAllPages();
+  return pages.map((page: any) => ({
+    params: { slug: page.slug },
+    props: { slug: page.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+const page = await getPageBySlug(slug);
+
+if (!page) return Astro.redirect('/404');
+
+const title = page.seoTitle || page.title;
+const description = page.seoDescription || '';
+
+function renderRichText(content: any): string {
+  if (!content) return '';
+  if (typeof content === 'string') return content;
+  if (!content.root?.children) return '';
+  return content.root.children.map((node: any) => {
+    if (node.type === 'paragraph') {
+      const text = (node.children || []).map((n: any) => {
+        let t = n.text || '';
+        if (n.bold) t = `<strong>${t}</strong>`;
+        if (n.italic) t = `<em>${t}</em>`;
+        return t;
+      }).join('');
+      return `<p>${text}</p>`;
+    }
+    if (node.type === 'heading') {
+      const text = (node.children || []).map((n: any) => n.text || '').join('');
+      return `<h${node.tag}>${text}</h${node.tag}>`;
+    }
+    if (node.type === 'list') {
+      const tag = node.listType === 'number' ? 'ol' : 'ul';
+      const items = (node.children || []).map((item: any) => {
+        const text = (item.children || []).map((n: any) => n.text || '').join('');
+        return `<li>${text}</li>`;
+      }).join('');
+      return `<${tag}>${items}</${tag}>`;
+    }
+    return '';
+  }).join('\n');
+}
+---
+
+<Layout title={title} description={description}>
+
+{page.layout?.map((block: any) => {
+
+  if (block.blockType === 'richTextBlock') return (
+    <div class="site-width text-width">
+      <div set:html={renderRichText(block.content)} />
+    </div>
+  );
+
+  if (block.blockType === 'heroTextBlock') return (
+    <div class="site-width text-width">
+      <h1>{block.heading}</h1>
+      {block.subtext && <p>{block.subtext}</p>}
+      {block.buttons?.map((btn: any) => (
+        <a href={btn.url} class={`btn btn-${btn.style}`}>{btn.label}</a>
+      ))}
+    </div>
+  );
+
+  if (block.blockType === 'textSectionBlock') return (
+    <div class="site-width text-width">
+      {block.heading && (
+        block.headingLevel === 'h1' ? <h1>{block.heading}</h1> :
+        block.headingLevel === 'h3' ? <h3>{block.heading}</h3> :
+        <h2>{block.heading}</h2>
+      )}
+      {block.subtext && <p class="sub-text">{block.subtext}</p>}
+      {block.content && <div set:html={renderRichText(block.content)} />}
+    </div>
+  );
+
+  if (block.blockType === 'twoColumnBlock') return (
+    <div class="site-width">
+      <div class={`two-columns variant-${block.variant || 'text'}`}>
+        {block.columns?.map((col: any) => (
+          <div class="column">
+            {col.heading && <h3>{col.heading}</h3>}
+            {col.content && <div set:html={renderRichText(col.content)} />}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'videoBlock') return (
+    <div class="site-width video-wrap">
+      <iframe src={block.embedUrl} frameborder="0" allowfullscreen height="480" width="100%" />
+      {block.caption && <p class="caption">{block.caption}</p>}
+    </div>
+  );
+
+  if (block.blockType === 'stepsBlock') return (
+    <div class="site-width">
+      {block.heading && <h2 class="text-center">{block.heading}</h2>}
+      {block.subtext && <p class="sub-text text-center">{block.subtext}</p>}
+      <div class="row">
+        {block.steps?.map((step: any) => (
+          <div class="column">
+            <div class="card">
+              <div class="card-header">{step.stepLabel}</div>
+              {step.image?.url && <div class="card-body"><img src={step.image.url} alt="" class="step-img" /></div>}
+              <div class="card-footer" set:html={renderRichText(step.content)} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'faqBlock') return (
+    <div class="page-faq-wrapper max-width">
+      {block.heading && <h1>{block.heading}</h1>}
+      <div class="active clearfix content-faq" id="faq-accordion-0">
+        {block.sections?.map((section: any, si: number) => (
+          <div class="col-md-6">
+            <div class="block-faq">
+              <h3 class="section">{section.sectionTitle}</h3>
+              <section>
+                {section.questions?.map((q: any, qi: number) => (
+                  <>
+                    <div class="title-faq collapsed" data-parent="#faq-accordion-0" data-toggle="collapse" href={`#collapse-${si}-${qi}`} id={`faq-${si}-${qi}`}>
+                      <a class="h3 no-border" href={`#faq-${si}-${qi}`}>
+                        <span class="num">{qi + 1}.</span>
+                        <span class="border">{q.question}</span>
+                      </a>
+                    </div>
+                    <div class="collapse" id={`collapse-${si}-${qi}`}>
+                      <div class="text" set:html={renderRichText(q.answer)} />
+                    </div>
+                  </>
+                ))}
+              </section>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'galleryBlock') return (
+    <div class="site-width constrain-block shapies">
+      {(block.heading || block.subtext) && (
+        <div class="caption">
+          {block.subtext && <div class="small">{block.subtext}</div>}
+          {block.heading && <div class="title"><span>{block.heading}</span></div>}
+        </div>
+      )}
+      <div class="selfies clearfix">
+        {block.images?.map((item: any) => (
+          <div class="selfie">
+            {item.url ? <a href={item.url}><img src={item.image?.url} alt={item.alt || ''} /></a>
+                      : <img src={item.image?.url} alt={item.alt || ''} />}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'categoryGridBlock') return (
+    <div class="ideas clearfix site-width">
+      {block.heading && <h2 class="narrow-heading">{block.heading}</h2>}
+      <div class="idea-block-wrapper">
+        {block.categories?.map((cat: any, i: number) => (
+          <div class={`idea-block t${i + 1}`}>
+            {cat.image?.url && <img src={cat.image.url} alt={cat.label || ''} />}
+            <span>{cat.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'testimonialsBlock') return (
+    <div class="site-width testimonials-block">
+      {block.heading && <h2>{block.heading}</h2>}
+      {block.testimonials?.map((t: any) => (
+        <div class="testimonial">
+          <blockquote>{t.quote}</blockquote>
+          <cite>{t.author}{t.company && `, ${t.company}`}</cite>
+        </div>
+      ))}
+    </div>
+  );
+
+  if (block.blockType === 'pricingBlock') return (
+    <div class="site-width pricing-block">
+      {block.heading && <h2>{block.heading}</h2>}
+      {block.plans?.map((plan: any) => (
+        <div class={`pricing-plan ${plan.highlighted ? 'highlighted' : ''}`}>
+          <div class="plan-name">{plan.name}</div>
+          <div class="plan-price">{plan.price}</div>
+          {plan.priceNote && <div class="plan-note">{plan.priceNote}</div>}
+          {plan.description && <div set:html={renderRichText(plan.description)} />}
+        </div>
+      ))}
+    </div>
+  );
+
+  if (block.blockType === 'logosBlock') return (
+    <div class="site-width">
+      <div class="news-articles">
+        {block.heading && <h3>{block.heading}</h3>}
+        {block.logos?.map((logo: any) => (
+          logo.url
+            ? <a target="_blank" href={logo.url}><img src={logo.image?.url} alt={logo.alt || ''} /></a>
+            : <img src={logo.image?.url} alt={logo.alt || ''} />
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'downloadBlock') return (
+    <div class="site-width download-block">
+      {block.heading && <h2>{block.heading}</h2>}
+      <div class="download-columns">
+        <div class="requirements">
+          {block.requirementsHeading && <h3>{block.requirementsHeading}</h3>}
+          {block.requirements && <div set:html={renderRichText(block.requirements)} />}
+        </div>
+        <div class="download-info">
+          {block.downloadHeading && <h3>{block.downloadHeading}</h3>}
+          {block.updatedDate && <p>Updated: {block.updatedDate}</p>}
+          {block.version && <p>Version: {block.version}</p>}
+          {block.language && <p>Language: {block.language}</p>}
+          {block.downloadUrl && <a href={block.downloadUrl} class="btn btn-primary">{block.buttonLabel || 'Download'}</a>}
+        </div>
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'ctaBlock') return (
+    <div class={`site-width cta-block variant-${block.variant || 'light'}`}>
+      {block.heading && <h2>{block.heading}</h2>}
+      {block.text && <p>{block.text}</p>}
+      {block.buttons?.map((btn: any) => (
+        <a href={btn.url} class={`btn btn-${btn.style}`}>{btn.label}</a>
+      ))}
+    </div>
+  );
+
+  if (block.blockType === 'specsBlock') return (
+    <div class="site-width specs-block">
+      {block.subtext && <p class="sub-text">{block.subtext}</p>}
+      {block.heading && <h3>{block.heading}</h3>}
+      {block.diagramImage?.url && <img src={block.diagramImage.url} alt="specs diagram" />}
+      <div class="specs-grid">
+        {block.specs?.map((spec: any) => (
+          <div class="spec-item">
+            {spec.icon?.url && <img src={spec.icon.url} alt="" class="icon" />}
+            <div class="graytext">{spec.label}</div>
+            <div class="darktext">{spec.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'embedGridBlock') return (
+    <div class="site-width">
+      {block.heading && <h3>{block.heading}</h3>}
+      {block.subtext && <p class="sub-text">{block.subtext}</p>}
+      <div class="row">
+        {block.embeds?.map((embed: any) => (
+          <div class="col-md-6 col-sm-12">
+            <div class="sketchfab-embed-wrapper">
+              <iframe src={embed.embedUrl} frameborder="0" height="480" allowfullscreen />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (block.blockType === 'rawHtmlBlock') {
+    const cleanHtml = (block.html || '').replace(/^(\s*<\/div>\s*)+/, '');
+    return <div set:html={cleanHtml} />;
+  }
+
+  return null;
+})}
+
+</Layout>

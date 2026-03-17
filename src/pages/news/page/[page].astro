@@ -1,18 +1,13 @@
 ---
 import BlogLayout from '../../../layouts/BlogLayout.astro';
-import { getCollection } from 'astro:content';
+import { getAllPosts, getPostsPaginated } from '../../../lib/payload';
 
 export async function getStaticPaths() {
-  const allPosts = await getCollection('blog', ({ data }) => {
-    return data.pubDate <= new Date();
-  });
-  
-  // Sort posts by date, newest first
-  const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  const allPosts = await getAllPosts();
   
   // Pagination - show 6 posts per page
   const postsPerPage = 6;
-  const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+  const totalPages = Math.ceil(allPosts.length / postsPerPage);
   
   // Generate paths for pages 2 through totalPages
   return Array.from({ length: totalPages - 1 }, (_, i) => ({
@@ -23,20 +18,12 @@ export async function getStaticPaths() {
 
 const { pageNumber } = Astro.props;
 
-const allPosts = await getCollection('blog', ({ data }) => {
-  return data.pubDate <= new Date();
-});
-
-// Sort posts by date, newest first
-const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-
 // Pagination - show 6 posts per page
 const postsPerPage = 6;
 const currentPage = pageNumber;
-const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
-const startIndex = (currentPage - 1) * postsPerPage;
-const endIndex = startIndex + postsPerPage;
-const posts = sortedPosts.slice(startIndex, endIndex);
+const response = await getPostsPaginated(currentPage, postsPerPage);
+const posts = response.docs;
+const totalPages = response.totalPages;
 
 const title = "Shapify News";
 const description = "Thoughts, stories and ideas.";
@@ -44,30 +31,29 @@ const description = "Thoughts, stories and ideas.";
 
 <BlogLayout {title} {description}>
 
-{posts.map(post => (
+{posts.map(post => {
+  const formattedDate = post.date ? new Date(post.date).toLocaleDateString('en-GB', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  }).replace(',', '') : ''
+  
+  return (
   <article class="post">
     <div class="post-header">
       <span class="post-meta">
-        <time datetime={post.data.pubDate.toISOString()}>
-          {post.data.pubDate.toLocaleDateString('en-GB', { 
-            day: 'numeric', 
-            month: 'short', 
-            year: 'numeric' 
-          }).replace(',', '')}
-        </time>
+        <time datetime={post.date}>{formattedDate}</time>
       </span>
       <h2 class="post-title">
-        <a href={`/news/${post.slug}/`}>{post.data.title}</a>
+        <a href={`/news/${post.slug}/`}>{post.title}</a>
       </h2>
     </div>
     <section class="post-excerpt">
       <p>
-        {post.data.description}
+        {post.description}
         <a class='read-more' href={`/news/${post.slug}/`}>Read more</a>
       </p>
     </section>
   </article>
-))}
+)})}
 
 <nav class="pagination" role="navigation">
   <span class="page-number">Page {currentPage} of {totalPages}</span>

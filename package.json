@@ -7,10 +7,16 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "build:all": "cd payload && npm run build && cd .. && astro build",
+    "dev:all": "concurrently \"cd payload && npm run dev\" \"astro dev\""
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
-    "astro": "^5.17.3"
+    "astro": "^5.17.3",
+    "marked": "^17.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

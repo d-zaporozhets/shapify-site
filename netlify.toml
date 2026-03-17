@@ -3,17 +3,16 @@
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
+# For static site generation
 [[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
+  from = "/*"
+  to = "/index.html"
   status = 200
 
-[[headers]]
-  for = "/admin/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
+# Note: Payload CMS runs separately on localhost:3002
+# For production, you would need to:
+# 1. Deploy Payload CMS separately (e.g., on Vercel, Railway, or another platform)
+# 2. Update PAYLOAD_URL in src/lib/payload.ts to point to your production Payload API
+# 3. Build Astro site with the production API URL
