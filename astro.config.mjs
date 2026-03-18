@@ -5,4 +5,8 @@ export default defineConfig({
   integrations: [mdx()],
   output: 'static',
   site: 'https://shapify.me',
+  build: {
+    format: 'file'
+  },
+  trailingSlash: 'never',
 });
