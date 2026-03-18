@@ -27,13 +27,13 @@ const description = "Thoughts, stories and ideas.";
         <time datetime={post.date}>{formattedDate}</time>
       </span>
       <h2 class="post-title">
-        <a href={`/news/${post.slug}/`}>{post.title}</a>
+        <a href={`/news/${post.slug}`}>{post.title}</a>
       </h2>
     </div>
     <section class="post-excerpt">
       <p>
         {post.description}
-        <a class='read-more' href={`/news/${post.slug}/`}>Read more</a>
+        <a class='read-more' href={`/news/${post.slug}`}>Read more</a>
       </p>
     </section>
   </article>
@@ -42,7 +42,7 @@ const description = "Thoughts, stories and ideas.";
 <nav class="pagination" role="navigation">
   <span class="page-number">Page {currentPage} of {totalPages}</span>
   {currentPage < totalPages && (
-    <a class="older-posts" href="/news/page/2/">Older Posts <span aria-hidden="true">→</span></a>
+    <a class="older-posts" href="/news/page/2">Older Posts <span aria-hidden="true">→</span></a>
   )}
 </nav>
 
